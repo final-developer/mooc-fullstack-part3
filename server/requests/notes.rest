@@ -1,0 +1,23 @@
+# HTTP Request Tests
+
+
+### GET ALL notes
+GET http://localhost:3001/api/notes
+
+
+### GET ONE note
+GET http://localhost:3001/api/notes/1
+
+
+### POST ONE note
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+   "content": "This is the content.",
+   "important": true
+}
+
+
+### DELETE ONE note
+DELETE http://localhost:3001/api/notes/1
