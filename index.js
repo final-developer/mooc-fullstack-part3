@@ -1,12 +1,21 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 
+// MongoDB and Mongoose handling
+const Note = require('./models/note')
+
+// for using json file format automatically when sending/receiving data
 app.use(express.json())
+// for using the /dist folder as frontend
 app.use(express.static('dist'))
 
+// "cors" for cross origin resource sharing
 const cors = require('cors')
 app.use(cors())
 
+
+// "requestLogger" for logging requests in console
 const requestLogger = (request, response, next) => {
    console.log('Method:', request.method)
    console.log('Path:  ', request.path)
@@ -15,6 +24,7 @@ const requestLogger = (request, response, next) => {
    next()
 }
 app.use(requestLogger)
+
 
 let notes = [
    {
@@ -39,7 +49,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/notes', (request, response) => {
-   response.json(notes)
+   Note.find({}).then(notes => {
+      response.json(notes)
+   })
 })
 
 app.get('/api/notes/:id', (request, response) => {
@@ -91,7 +103,7 @@ const unknownEndpoint = (request, response) => {
 }
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
    console.log(`started on port ${PORT}`)
 })
